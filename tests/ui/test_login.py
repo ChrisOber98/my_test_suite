@@ -1,4 +1,16 @@
 from playwright.sync_api import Page, expect
+from config import (
+    LOGIN_PAGE_URL, 
+    PRODUCT_PAGE_URL, 
+    STANDARD_USER, 
+    PASSWORD, 
+    WRONG_PASSWORD, 
+    ERROR_USERNAME_PASSWORD, 
+    ERROR_LOCKED_OUT_USER,
+    LOCKED_OUT_USER, 
+    ERROR_USERNAME,
+    ERROR_PASSWORD
+)
 
 def test_login_fails_with_incorrect_password(page: Page):
     """
@@ -8,14 +20,14 @@ def test_login_fails_with_incorrect_password(page: Page):
     Spec: test-cases/saucedemo-test-cases.md
     """
 
-    page.goto('https://www.saucedemo.com/')
+    page.goto(LOGIN_PAGE_URL)
 
-    page.locator('[data-test="username"]').fill("standard_user")
-    page.locator('[data-test="password"]').fill("wrong_password")
+    page.locator('[data-test="username"]').fill(STANDARD_USER)
+    page.locator('[data-test="password"]').fill(WRONG_PASSWORD)
     page.locator('[data-test="login-button"]').click()
     
-    expect(page.locator('[data-test="error"]')).to_have_text("Epic sadface: Username and password do not match any user in this service")
-    expect(page).to_have_url('https://www.saucedemo.com/')
+    expect(page.locator('[data-test="error"]')).to_have_text(ERROR_USERNAME_PASSWORD)
+    expect(page).to_have_url(LOGIN_PAGE_URL)
 
 def test_login_fails_with_locked_out_user(page: Page):
     """
@@ -26,14 +38,14 @@ def test_login_fails_with_locked_out_user(page: Page):
     Spec: test-cases/saucedemo-test-cases.md
     """
 
-    page.goto('https://www.saucedemo.com/')
+    page.goto(LOGIN_PAGE_URL)
 
-    page.locator('[data-test="username"]').fill("locked_out_user")
-    page.locator('[data-test="password"]').fill("secret_sauce")
+    page.locator('[data-test="username"]').fill(LOCKED_OUT_USER)
+    page.locator('[data-test="password"]').fill(PASSWORD)
     page.locator('[data-test="login-button"]').click()
     
-    expect(page.locator('[data-test="error"]')).to_have_text("Epic sadface: Sorry, this user has been locked out.")
-    expect(page).to_have_url('https://www.saucedemo.com/')
+    expect(page.locator('[data-test="error"]')).to_have_text(ERROR_LOCKED_OUT_USER)
+    expect(page).to_have_url(LOGIN_PAGE_URL)
 
 def test_login_fails_with_no_username_and_password_entered(page: Page):
     """
@@ -43,12 +55,12 @@ def test_login_fails_with_no_username_and_password_entered(page: Page):
     Spec: test-cases/saucedemo-test-cases.md
     """
 
-    page.goto('https://www.saucedemo.com/')
+    page.goto(LOGIN_PAGE_URL)
 
     page.locator('[data-test="login-button"]').click()
     
-    expect(page.locator('[data-test="error"]')).to_have_text("Epic sadface: Username is required")
-    expect(page).to_have_url('https://www.saucedemo.com/')
+    expect(page.locator('[data-test="error"]')).to_have_text(ERROR_USERNAME)
+    expect(page).to_have_url(LOGIN_PAGE_URL)
 
 def test_login_fails_with_no_password_entered(page: Page):
     """
@@ -58,13 +70,13 @@ def test_login_fails_with_no_password_entered(page: Page):
     Spec: test-cases/saucedemo-test-cases.md
     """
 
-    page.goto('https://www.saucedemo.com/')
+    page.goto(LOGIN_PAGE_URL)
 
-    page.locator('[data-test="username"]').fill("standard_user")
+    page.locator('[data-test="username"]').fill(STANDARD_USER)
     page.locator('[data-test="login-button"]').click()
     
-    expect(page.locator('[data-test="error"]')).to_have_text("Epic sadface: Password is required")
-    expect(page).to_have_url('https://www.saucedemo.com/')
+    expect(page.locator('[data-test="error"]')).to_have_text(ERROR_PASSWORD)
+    expect(page).to_have_url(LOGIN_PAGE_URL)
 
 def test_login_fails_with_no_username_entered(page: Page):
     """
@@ -74,13 +86,13 @@ def test_login_fails_with_no_username_entered(page: Page):
     Spec: test-cases/saucedemo-test-cases.md
     """
 
-    page.goto('https://www.saucedemo.com/')
+    page.goto(LOGIN_PAGE_URL)
 
-    page.locator('[data-test="password"]').fill("secret_sauce")
+    page.locator('[data-test="password"]').fill(PASSWORD)
     page.locator('[data-test="login-button"]').click()
     
-    expect(page.locator('[data-test="error"]')).to_have_text("Epic sadface: Username is required")
-    expect(page).to_have_url('https://www.saucedemo.com/')
+    expect(page.locator('[data-test="error"]')).to_have_text(ERROR_USERNAME)
+    expect(page).to_have_url(LOGIN_PAGE_URL)
 
 def test_login_succeeds_with_valid_login_credentials(page: Page):
     """
@@ -90,10 +102,10 @@ def test_login_succeeds_with_valid_login_credentials(page: Page):
     Spec: test-cases/saucedemo-test-cases.md
     """
 
-    page.goto('https://www.saucedemo.com/')
+    page.goto(LOGIN_PAGE_URL)
 
-    page.locator('[data-test="username"]').fill("standard_user")
-    page.locator('[data-test="password"]').fill("secret_sauce")
+    page.locator('[data-test="username"]').fill(STANDARD_USER)
+    page.locator('[data-test="password"]').fill(PASSWORD)
     page.locator('[data-test="login-button"]').click()
     
-    expect(page).to_have_url('https://www.saucedemo.com/inventory.html')  
+    expect(page).to_have_url(PRODUCT_PAGE_URL) 
